@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/person-main.webp" type="image/webp">
   <style>
     /* ─── Variables ─── */
     :root {
@@ -223,6 +224,7 @@
       aspect-ratio: 3/4;
       filter: drop-shadow(0 24px 60px rgba(37, 31, 28, 0.18));
       transform: rotate(2deg);
+      will-change: transform;
     }
 
     .hero__person img {
@@ -1072,7 +1074,10 @@
       <div class="hero__deco hero__deco--1"></div>
       <div class="hero__deco hero__deco--2"></div>
       <div class="hero__person">
-        <img src="assets/person-main.png" alt="曾青青拼贴风格人物插画">
+        <picture>
+          <source srcset="assets/person-main.webp" type="image/webp">
+          <img src="assets/person-main.png" alt="曾青青拼贴风格人物插画" fetchpriority="high" decoding="async">
+        </picture>
       </div>
     </div>
     <div class="scroll-hint">
