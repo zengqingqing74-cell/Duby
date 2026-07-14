@@ -1311,35 +1311,33 @@
 
       reveals.forEach(el => revealObserver.observe(el));
 
-      // Card passed state (fade previous cards)
-      const cardObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          const card = entry.target;
-          const rect = card.getBoundingClientRect();
-          if (rect.top < -window.innerHeight * 0.35) {
-            card.classList.add('passed');
-          } else {
-            card.classList.remove('passed');
-          }
-        });
-      }, { threshold: [0, 0.5, 1] });
-
-      cards.forEach(card => cardObserver.observe(card));
-
-      // Active nav link based on current card
+      // Card passed state + active nav link based on current section
+      const hero = document.getElementById('hero');
       const sectionObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const id = entry.target.id;
-            navAnchors.forEach(a => {
-              a.classList.toggle('active', a.dataset.target === id);
-            });
-          }
+          entry.target._isIntersecting = entry.isIntersecting;
+        });
+        const activeCard = Array.from(cards)
+          .filter(card => card._isIntersecting)
+          .sort((a, b) => parseInt(b.dataset.index) - parseInt(a.dataset.index))[0];
+        let activeId, activeIndex = -1;
+        if (activeCard) {
+          activeId = activeCard.id;
+          activeIndex = parseInt(activeCard.dataset.index);
+        } else if (hero._isIntersecting) {
+          activeId = 'hero';
+        }
+        cards.forEach(card => {
+          const cardIndex = parseInt(card.dataset.index);
+          card.classList.toggle('passed', cardIndex < activeIndex);
+        });
+        navAnchors.forEach(a => {
+          a.classList.toggle('active', a.dataset.target === activeId);
         });
       }, { threshold: 0.4 });
 
       cards.forEach(card => sectionObserver.observe(card));
-      sectionObserver.observe(document.getElementById('hero'));
+      sectionObserver.observe(hero);
 
     })();
   </script>
